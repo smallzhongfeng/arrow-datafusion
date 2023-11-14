@@ -494,47 +494,6 @@ impl DisplayAs for StatisticsExec {
     }
 }
 
-impl ExecutionPlan for StatisticsExec {
-    fn as_any(&self) -> &dyn Any {
-        self
-    }
-
-    fn schema(&self) -> SchemaRef {
-        Arc::clone(&self.schema)
-    }
-
-    fn output_partitioning(&self) -> Partitioning {
-        Partitioning::UnknownPartitioning(2)
-    }
-
-    fn output_ordering(&self) -> Option<&[PhysicalSortExpr]> {
-        None
-    }
-
-    fn children(&self) -> Vec<Arc<dyn ExecutionPlan>> {
-        vec![]
-    }
-
-    fn with_new_children(
-        self: Arc<Self>,
-        _: Vec<Arc<dyn ExecutionPlan>>,
-    ) -> Result<Arc<dyn ExecutionPlan>> {
-        Ok(self)
-    }
-
-    fn execute(
-        &self,
-        _partition: usize,
-        _context: Arc<TaskContext>,
-    ) -> Result<SendableRecordBatchStream> {
-        unimplemented!("This plan only serves for testing statistics")
-    }
-
-    fn statistics(&self) -> Result<Statistics> {
-        Ok(self.stats.clone())
-    }
-}
-
 /// Execution plan that emits streams that block forever.
 ///
 /// This is useful to test shutdown / cancelation behavior of certain execution plans.
